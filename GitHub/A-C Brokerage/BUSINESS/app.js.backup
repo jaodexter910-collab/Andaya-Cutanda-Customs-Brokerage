@@ -1,0 +1,1491 @@
+// Dashboard Functionality
+
+// Update date information
+function updateDate() {
+    const dateElement = document.getElementById('dateInfo');
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const today = new Date().toLocaleDateString('en-US', options);
+    dateElement.textContent = `Today: ${today}`;
+}
+
+// Setup Sidebar Toggle
+function setupSidebarToggle() {
+    const toggleBtn = document.getElementById('toggleSidebar');
+    const sidebar = document.getElementById('sidebar');
+    
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+        });
+    }
+
+    // Close sidebar when a link is clicked on mobile
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+            }
+        });
+    });
+}
+
+// Setup sidebar link active state
+function setupSidebarNavigation() {
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Remove active class from all sidebar links
+            sidebarLinks.forEach(l => l.classList.remove('active'));
+            // Add active class to clicked link
+            this.classList.add('active');
+            
+            // Get the target section
+            const targetHash = this.getAttribute('href');
+            const targetSection = document.querySelector(targetHash + '-content');
+            
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show the target section
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+        });
+    });
+}
+
+// Navigation link active state (old top nav - removed)
+function setupNavigation() {
+    // Navigation removed, using sidebar instead
+}
+
+// Animate metric values on page load
+function animateMetrics() {
+    const metrics = document.querySelectorAll('.metric-value');
+    
+    metrics.forEach(metric => {
+        const finalValue = metric.textContent;
+        let currentValue = 0;
+        
+        // Only animate numbers
+        if (finalValue.includes(',')) {
+            const numericValue = parseInt(finalValue.replace(/,/g, ''));
+            const increment = Math.ceil(numericValue / 30);
+            
+            const interval = setInterval(() => {
+                if (currentValue < numericValue) {
+                    currentValue += increment;
+                    metric.textContent = currentValue.toLocaleString();
+                } else {
+                    metric.textContent = numericValue.toLocaleString();
+                    clearInterval(interval);
+                }
+            }, 30);
+        }
+    });
+}
+
+// Handle View All Buttons
+function setupViewAllButton() {
+    const viewAllBtn = document.querySelector('.view-all-btn');
+    
+    if (viewAllBtn) {
+        viewAllBtn.addEventListener('click', function() {
+            alert('Shipments page would load here');
+        });
+    }
+}
+
+// Add hover effect to metric cards
+function setupCardInteractions() {
+    const metricCards = document.querySelectorAll('.metric-card');
+    
+    metricCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.cursor = 'pointer';
+        });
+        
+        card.addEventListener('click', function() {
+            const title = this.querySelector('h3').textContent;
+            console.log(`Clicked on: ${title}`);
+        });
+    });
+}
+
+// Setup table row interactions
+function setupTableInteractions() {
+    const tableRows = document.querySelectorAll('.shipment-table tbody tr');
+    
+    tableRows.forEach(row => {
+        row.addEventListener('click', function() {
+            const shipmentId = this.querySelector('td').textContent;
+            console.log(`View details for: ${shipmentId}`);
+        });
+        
+        row.addEventListener('mouseenter', function() {
+            this.style.cursor = 'pointer';
+            this.style.backgroundColor = '#ecf0f1';
+        });
+        
+        row.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = '';
+        });
+    });
+}
+
+// Setup calculator card interactions
+function setupCalculatorCards() {
+    const calculatorCards = document.querySelectorAll('.calculator-card');
+    
+    calculatorCards.forEach(card => {
+        const btn = card.querySelector('.calc-btn');
+        if (btn) {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const calculatorType = card.getAttribute('data-calculator');
+                openCalculator(calculatorType);
+            });
+        }
+    });
+}
+
+// Open specific calculator modal
+function openCalculator(type) {
+    const modalId = `${type}-calculator-modal`;
+    const modal = document.getElementById(modalId);
+    
+    if (modal) {
+        modal.classList.add('active');
+        setupModalClose(modal);
+        return;
+    }
+
+    if (type === 'hs-code-finder') {
+        // Activate hs code finder section through navigation logic
+        document.querySelectorAll('.section-content').forEach(section => {
+            section.classList.remove('active');
+        });
+        const targetSection = document.getElementById('hs-code-finder-content');
+        if (targetSection) targetSection.classList.add('active');
+
+        document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
+        const hsCodeLink = document.querySelector('.sidebar-link[href="#hs-code-finder"]');
+        if (hsCodeLink) hsCodeLink.classList.add('active');
+    }
+}
+
+// Setup modal close functionality
+function setupModalClose(modal) {
+    const closeBtn = modal.querySelector('.modal-close');
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            modal.classList.remove('active');
+        });
+    }
+    
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+}
+
+// ==========================================
+// PASSENGER SERVICE CALCULATOR FUNCTIONS
+// ==========================================
+
+function calculatePassengerService() {
+    // Get input values
+    const currency = document.getElementById('ps-currency').value;
+    const foreignValue = parseFloat(document.getElementById('ps-foreign-value').value) || 0;
+    const exchangeRate = parseFloat(document.getElementById('ps-exchange-rate').value) || 56.00;
+    const dutyRate = parseFloat(document.getElementById('ps-duty-rate').value) || 0;
+    const exciseAmount = parseFloat(document.getElementById('ps-excise-amount').value) || 0;
+    const includeSurcharge = document.getElementById('ps-include-surcharge').checked;
+
+    // Validate currency selection
+    if (!currency) {
+        alert('Please select a currency');
+        return;
+    }
+
+    // Calculate Dutiable Value
+    const dutiableValue = foreignValue * exchangeRate;
+
+    // Calculate Customs Duties
+    const customsDuties = dutiableValue * (dutyRate / 100);
+
+    // Customs Documentary Stamp (Fixed)
+    const docStamp = 130;
+
+    // Calculate Import Processing Charge based on DV brackets
+    const importProcessingCharge = calculateImportProcessingCharge(dutiableValue);
+
+    // Calculate Landed Cost
+    const landedCost = dutiableValue + customsDuties + docStamp + importProcessingCharge;
+
+    // Excise Tax (from input)
+    const exciseTax = exciseAmount;
+
+    // Calculate VAT: (Landed Cost + Excise Tax) * 0.12
+    const vat = (landedCost + exciseTax) * 0.12;
+
+    // Calculate Surcharge: Landed Cost * 30% (only if enabled)
+    const surcharge = includeSurcharge ? (landedCost * 0.30) : 0;
+
+    // Total Amount Due
+    const totalAmountDue = customsDuties + vat + docStamp + importProcessingCharge + exciseTax + surcharge;
+
+    // Display results
+    displayPassengerServiceResults({
+        currency,
+        foreignValue,
+        exchangeRate,
+        dutyRate,
+        dutiableValue,
+        customsDuties,
+        docStamp,
+        importProcessingCharge,
+        landedCost,
+        exciseTax,
+        vat,
+        surcharge,
+        totalAmountDue,
+        includeSurcharge
+    });
+
+    // Save to history
+    const passengerName = document.getElementById('ps-passenger-name').value;
+    const flightNo = document.getElementById('ps-flight-no').value;
+    const commodity = document.getElementById('ps-commodity').value;
+
+    saveToHistory('passenger-service', {
+        passengerName,
+        flightNo,
+        commodity,
+        currency,
+        foreignValue,
+        exchangeRate,
+        dutiableValue,
+        customsDuties,
+        docStamp,
+        importProcessingCharge,
+        landedCost,
+        exciseTax,
+        vat,
+        surcharge,
+        totalAmountDue,
+        includeSurcharge
+    });
+}
+
+function calculateImportProcessingCharge(dutiableValue) {
+    if (dutiableValue > 750000) {
+        return 2000;
+    } else if (dutiableValue > 500000) {
+        return 1500;
+    } else if (dutiableValue > 250000) {
+        return 1000;
+    } else if (dutiableValue > 50000) {
+        return 750;
+    } else if (dutiableValue > 25000) {
+        return 500;
+    } else if (dutiableValue > 10000) {
+        return 250;
+    } else {
+        return 0; // Below Php 10,000
+    }
+}
+
+function displayPassengerServiceResults(results) {
+    // Computation Breakdown
+    document.getElementById('ps-dutiable-value').textContent = formatCurrency(results.dutiableValue);
+    document.getElementById('ps-dutiable-value-formula').textContent = `= ${results.foreignValue.toFixed(2)} × ${results.exchangeRate.toFixed(2)}`;
+    
+    document.getElementById('ps-customs-duties').textContent = formatCurrency(results.customsDuties);
+    document.getElementById('ps-customs-duties-formula').textContent = `= ${formatCurrency(results.dutiableValue)} × ${results.dutyRate}%`;
+    
+    document.getElementById('ps-doc-stamp').textContent = formatCurrency(results.docStamp);
+    document.getElementById('ps-doc-stamp-formula').textContent = `= Fixed Amount`;
+    
+    document.getElementById('ps-processing-charge').textContent = formatCurrency(results.importProcessingCharge);
+    document.getElementById('ps-processing-charge-formula').textContent = `= Based on DV Bracket (${formatCurrency(results.dutiableValue)})`;
+    
+    document.getElementById('ps-landed-cost').textContent = formatCurrency(results.landedCost);
+    document.getElementById('ps-landed-cost-formula').textContent = `= ${formatCurrency(results.dutiableValue)} + ${formatCurrency(results.customsDuties)} + ${formatCurrency(results.docStamp)} + ${formatCurrency(results.importProcessingCharge)}`;
+    
+    document.getElementById('ps-excise-tax').textContent = formatCurrency(results.exciseTax);
+    document.getElementById('ps-excise-tax-formula').textContent = `= From Excise Input`;
+    
+    document.getElementById('ps-vat').textContent = formatCurrency(results.vat);
+    document.getElementById('ps-vat-formula').textContent = `= (${formatCurrency(results.landedCost)} + ${formatCurrency(results.exciseTax)}) × 12%`;
+    
+    document.getElementById('ps-surcharge').textContent = formatCurrency(results.surcharge);
+    document.getElementById('ps-surcharge-formula').textContent = `= ${formatCurrency(results.landedCost)} × 30%`;
+
+    // Update surcharge styling if not included
+    const surchargeElement = document.getElementById('ps-surcharge').parentElement;
+    if (!results.includeSurcharge) {
+        surchargeElement.style.opacity = '0.5';
+        surchargeElement.title = 'Surcharge is not included';
+    } else {
+        surchargeElement.style.opacity = '1';
+        surchargeElement.title = '';
+    }
+
+    // Summary of Payment Breakdown
+    document.getElementById('ps-summary-duties').textContent = formatCurrencyWholeNumber(results.customsDuties);
+    document.getElementById('ps-summary-vat').textContent = formatCurrencyWholeNumber(results.vat);
+    document.getElementById('ps-summary-stamp').textContent = formatCurrencyWholeNumber(results.docStamp);
+    document.getElementById('ps-summary-charge').textContent = formatCurrencyWholeNumber(results.importProcessingCharge);
+    document.getElementById('ps-summary-excise').textContent = formatCurrencyWholeNumber(results.exciseTax);
+    document.getElementById('ps-summary-surcharge').textContent = formatCurrencyWholeNumber(results.surcharge);
+    document.getElementById('ps-total-due').textContent = formatCurrencyWholeNumber(results.totalAmountDue);
+}
+
+function resetPassengerServiceCalculator() {
+    document.getElementById('ps-passenger-name').value = '';
+    document.getElementById('ps-flight-no').value = '';
+    document.getElementById('ps-commodity').value = '';
+    document.getElementById('ps-currency').value = '';
+    document.getElementById('ps-foreign-value').value = '';
+    document.getElementById('ps-exchange-rate').value = '';
+    document.getElementById('ps-duty-rate').value = '';
+    document.getElementById('ps-excise-amount').value = '';
+    document.getElementById('ps-include-surcharge').checked = false;
+    document.getElementById('ps-results').style.display = 'none';
+}
+
+function resetPassengerServiceCalculator() {
+    document.getElementById('ps-passenger-name').value = '';
+    document.getElementById('ps-flight-no').value = '';
+    document.getElementById('ps-commodity').value = '';
+    document.getElementById('ps-currency').value = '';
+    document.getElementById('ps-foreign-value').value = '';
+    document.getElementById('ps-exchange-rate').value = '56.00';
+    document.getElementById('ps-duty-rate').value = '';
+    document.getElementById('ps-excise-amount').value = '';
+    document.getElementById('ps-include-surcharge').checked = true;
+
+    // Reset results
+    document.getElementById('ps-dutiable-value').textContent = '₱0.00';
+    document.getElementById('ps-dutiable-value-formula').textContent = '= 0.00 × 56.00';
+    
+    document.getElementById('ps-customs-duties').textContent = '₱0.00';
+    document.getElementById('ps-customs-duties-formula').textContent = '= ₱0.00 × 0%';
+    
+    document.getElementById('ps-doc-stamp').textContent = '₱130.00';
+    document.getElementById('ps-doc-stamp-formula').textContent = '= Fixed Amount';
+    
+    document.getElementById('ps-processing-charge').textContent = '₱0.00';
+    document.getElementById('ps-processing-charge-formula').textContent = '= Based on DV Bracket';
+    
+    document.getElementById('ps-landed-cost').textContent = '₱0.00';
+    document.getElementById('ps-landed-cost-formula').textContent = '= DV + Duties + Stamp + IPC';
+    
+    document.getElementById('ps-excise-tax').textContent = '₱0.00';
+    document.getElementById('ps-excise-tax-formula').textContent = '= From Excise Input';
+    
+    document.getElementById('ps-vat').textContent = '₱0.00';
+    document.getElementById('ps-vat-formula').textContent = '= (LC + Excise) × 12%';
+    
+    document.getElementById('ps-surcharge').textContent = '₱0.00';
+    document.getElementById('ps-surcharge-formula').textContent = '= LC × 30%';
+
+    document.getElementById('ps-summary-duties').textContent = '₱0.00';
+    document.getElementById('ps-summary-vat').textContent = '₱0.00';
+    document.getElementById('ps-summary-stamp').textContent = '₱130.00';
+    document.getElementById('ps-summary-charge').textContent = '₱0.00';
+    document.getElementById('ps-summary-excise').textContent = '₱0.00';
+    document.getElementById('ps-summary-surcharge').textContent = '₱0.00';
+    document.getElementById('ps-total-due').textContent = '₱0.00';
+
+    // Reset surcharge styling
+    const surchargeElement = document.getElementById('ps-surcharge').parentElement;
+    surchargeElement.style.opacity = '1';
+    surchargeElement.title = '';
+}
+
+// Utility function to format currency
+function formatCurrency(value) {
+    return '₱' + parseFloat(value).toLocaleString('en-PH', { 
+        minimumFractionDigits: 2, 
+        maximumFractionDigits: 2 
+    });
+}
+
+function formatCurrencyWholeNumber(value) {
+    return '₱' + Math.round(parseFloat(value)).toLocaleString('en-PH', { 
+        minimumFractionDigits: 0, 
+        maximumFractionDigits: 0 
+    });
+}
+
+// ==========================================
+// COMPUTATION HISTORY FUNCTIONS
+// ==========================================
+
+function saveToHistory(calculationType, data) {
+    let history = JSON.parse(localStorage.getItem('computationHistory')) || [];
+    
+    const historyEntry = {
+        id: Date.now(),
+        type: calculationType,
+        timestamp: new Date().toLocaleString('en-PH'),
+        data: data
+    };
+    
+    history.unshift(historyEntry); // Add to beginning
+    localStorage.setItem('computationHistory', JSON.stringify(history));
+    displayComputationHistory();
+}
+
+function displayComputationHistory() {
+    const history = JSON.parse(localStorage.getItem('computationHistory')) || [];
+    const container = document.getElementById('computation-history-container');
+    
+    if (history.length === 0) {
+        container.innerHTML = '<p class="empty-history">No computations yet. Start calculating to build history.</p>';
+        return;
+    }
+    
+    container.innerHTML = history.map(entry => {
+        if (entry.type === 'passenger-service') {
+            return `
+                <div class="history-item">
+                    <div class="history-item-header">
+                        <div>
+                            <div class="history-item-title">Passenger Service - ${entry.data.passengerName || 'N/A'}</div>
+                            <div class="history-item-time">${entry.timestamp}</div>
+                        </div>
+                    </div>
+                    <div class="history-item-details">
+                        <div class="history-item-detail-row">
+                            <span class="history-item-detail-label">Flight:</span>
+                            <span>${entry.data.flightNo || 'N/A'}</span>
+                        </div>
+                        <div class="history-item-detail-row">
+                            <span class="history-item-detail-label">Commodity:</span>
+                            <span>${entry.data.commodity || 'N/A'}</span>
+                        </div>
+                        <div class="history-item-detail-row">
+                            <span class="history-item-detail-label">Currency:</span>
+                            <span>${entry.data.currency || 'N/A'}</span>
+                        </div>
+                        <div class="history-item-detail-row">
+                            <span class="history-item-detail-label">Total Due:</span>
+                            <span class="history-item-detail-value">${formatCurrency(entry.data.totalAmountDue)}</span>
+                        </div>
+                    </div>
+                    <div class="history-item-actions">
+                        <button class="history-item-btn history-print-btn" onclick="printHistoryItem(${entry.id})">Print</button>
+                        <button class="history-item-btn history-delete-btn" onclick="deleteHistoryItem(${entry.id})">Delete</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        if (entry.type && entry.type.startsWith('excise-')) {
+            const typeLabel = entry.type.replace('excise-', '').replace(/-/g, ' ').toUpperCase();
+            const totalValue = entry.data.total !== undefined ? entry.data.total : entry.data.excise;
+
+            return `
+                <div class="history-item">
+                    <div class="history-item-header">
+                        <div>
+                            <div class="history-item-title">Excise - ${typeLabel}</div>
+                            <div class="history-item-time">${entry.timestamp}</div>
+                        </div>
+                    </div>
+                    <div class="history-item-details">
+                        <div class="history-item-detail-row">
+                            <span class="history-item-detail-label">Type:</span>
+                            <span>${typeLabel}</span>
+                        </div>
+                        <div class="history-item-detail-row">
+                            <span class="history-item-detail-label">Total Excise:</span>
+                            <span class="history-item-detail-value">${formatCurrencyWholeNumber(totalValue || 0)}</span>
+                        </div>
+                        <div class="history-item-detail-row">
+                            <span class="history-item-detail-label">Details:</span>
+                            <span>See complete item in console</span>
+                        </div>
+                    </div>
+                    <div class="history-item-actions">
+                        <button class="history-item-btn history-print-btn" onclick="printHistoryItem(${entry.id})">Print</button>
+                        <button class="history-item-btn history-delete-btn" onclick="deleteHistoryItem(${entry.id})">Delete</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        if (entry.type === 'hs-code-finder') {
+            return `
+                <div class="history-item">
+                    <div class="history-item-header">
+                        <div>
+                            <div class="history-item-title">HS Code Finder</div>
+                            <div class="history-item-time">${entry.timestamp}</div>
+                        </div>
+                    </div>
+                    <div class="history-item-details">
+                        <div class="history-item-detail-row">
+                            <span class="history-item-detail-label">Commodity:</span>
+                            <span>${entry.data.description || 'N/A'}</span>
+                        </div>
+                        <div class="history-item-detail-row">
+                            <span class="history-item-detail-label">Country:</span>
+                            <span>${entry.data.country || 'N/A'}</span>
+                        </div>
+                        <div class="history-item-detail-row">
+                            <span class="history-item-detail-label">HS Code:</span>
+                            <span>${entry.data.hsCode || 'Not found'}</span>
+                        </div>
+                        <div class="history-item-detail-row">
+                            <span class="history-item-detail-label">Duty Rate:</span>
+                            <span>${entry.data.rate !== null ? entry.data.rate + '%' : 'N/A'}</span>
+                        </div>
+                    </div>
+                    <div class="history-item-actions">
+                        <button class="history-item-btn history-print-btn" onclick="printHistoryItem(${entry.id})">Print</button>
+                        <button class="history-item-btn history-delete-btn" onclick="deleteHistoryItem(${entry.id})">Delete</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        return '';
+    }).join('');
+}
+
+function deleteHistoryItem(id) {
+    if (confirm('Are you sure you want to delete this computation?')) {
+        let history = JSON.parse(localStorage.getItem('computationHistory')) || [];
+        history = history.filter(item => item.id !== id);
+        localStorage.setItem('computationHistory', JSON.stringify(history));
+        displayComputationHistory();
+    }
+}
+
+function clearComputationHistory() {
+    if (confirm('Are you sure you want to clear all computation history? This cannot be undone.')) {
+        localStorage.removeItem('computationHistory');
+        displayComputationHistory();
+    }
+}
+
+function printHistoryItem(id) {
+    const history = JSON.parse(localStorage.getItem('computationHistory')) || [];
+    const entry = history.find(item => item.id === id);
+    
+    if (!entry) return;
+
+    const printWindow = window.open('', '', 'width=1000,height=800');
+    const data = entry.data;
+
+    if (entry.type.startsWith('excise-')) {
+        const typeLabel = entry.type.replace('excise-', '').replace(/-/g, ' ').toUpperCase();
+        printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Excise History Receipt - ${typeLabel}</title>
+            <style>
+                * { box-sizing: border-box; }
+                html, body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+                body { margin: 20px; }
+                h1 { font-size: 22px; }
+                .row { margin: 8px 0; display: flex; justify-content: space-between; }
+                .label { font-weight: 700; }
+                .value { font-weight: 600; }
+            </style>
+        </head>
+        <body>
+            <h1>Excise Calculation: ${typeLabel}</h1>
+            <div class="row"><span class="label">Timestamp:</span><span class="value">${entry.timestamp}</span></div>
+            <div class="row"><span class="label">Total Excise:</span><span class="value">${formatCurrencyWholeNumber(data.total !== undefined ? data.total : data.excise)}</span></div>
+            <div class="row"><span class="label">Fields:</span><span class="value">${Object.keys(data).map(k => `${k}: ${data[k]}`).join(', ')}</span></div>
+        </body>
+        </html>
+        `);
+        printWindow.document.close();
+        return;
+    }
+
+    if (entry.type !== 'passenger-service') return;
+    
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Computation Receipt - ${data.passengerName}</title>
+            <style>
+                * { box-sizing: border-box; }
+                html, body { 
+                    margin: 0; 
+                    padding: 0; 
+                    font-family: Arial, sans-serif; 
+                }
+                body { 
+                    margin: 10px; 
+                    padding: 10px;
+                    background-color: #fff;
+                }
+                .container {
+                    max-width: 900px;
+                    margin: 0 auto;
+                    background: white;
+                }
+                .header { 
+                    text-align: center; 
+                    margin-bottom: 20px; 
+                    border-bottom: 2px solid #333; 
+                    padding-bottom: 10px; 
+                }
+                .logo-section { 
+                    text-align: center; 
+                    margin-bottom: 5px; 
+                }
+                .logo-image { 
+                    height: 70px; 
+                    width: auto; 
+                    margin-bottom: 2px;
+                    max-width: 100%;
+                }
+                .header h1 { 
+                    margin: 5px 0 2px 0; 
+                    color: #2c3e50; 
+                    font-size: clamp(16px, 5vw, 24px);
+                }
+                .header p { 
+                    margin: 3px 0; 
+                    color: #666; 
+                    font-size: clamp(12px, 3vw, 14px);
+                }
+                .section { 
+                    margin: 15px 0; 
+                    padding: 0 10px;
+                }
+                .section-title { 
+                    font-weight: bold; 
+                    font-size: clamp(12px, 4vw, 15px);
+                    border-bottom: 1px solid #ddd; 
+                    padding-bottom: 5px; 
+                    margin-bottom: 8px; 
+                }
+                .row { 
+                    display: flex; 
+                    justify-content: space-between; 
+                    flex-wrap: wrap;
+                    padding: 6px 0; 
+                    border-bottom: 1px solid #eee; 
+                    font-size: clamp(11px, 3vw, 13px);
+                }
+                .label { 
+                    font-weight: 500;
+                    flex: 1;
+                    word-break: break-word;
+                }
+                .value { 
+                    text-align: right;
+                    margin-left: 10px;
+                    white-space: nowrap;
+                }
+                .highlight-row { 
+                    background-color: #f0f8ff; 
+                    padding: 8px; 
+                    margin: 10px 0; 
+                    border-left: 3px solid #3498db;
+                }
+                .total-row { 
+                    background-color: #f0f0f0; 
+                    padding: 8px; 
+                    font-weight: bold; 
+                    font-size: clamp(13px, 4vw, 16px);
+                    margin-top: 10px;
+                }
+                .footer { 
+                    text-align: center; 
+                    margin-top: 20px; 
+                    color: #666; 
+                    font-size: clamp(10px, 2vw, 12px);
+                }
+                
+                @media print {
+                    body { margin: 0; padding: 0; }
+                    .container { max-width: 100%; }
+                    .header { page-break-after: avoid; }
+                    .section { page-break-inside: avoid; }
+                }
+                
+                @media screen and (max-width: 768px) {
+                    body { margin: 5px; padding: 5px; }
+                    .section { padding: 0 5px; }
+                    .row { padding: 4px 0; }
+                    .value { margin-left: 5px; }
+                }
+                
+                @media screen and (max-width: 480px) {
+                    body { margin: 3px; padding: 3px; }
+                    .header { margin-bottom: 15px; }
+                    .section { padding: 0 3px; margin: 10px 0; }
+                    .row { flex-direction: column; padding: 3px 0; }
+                    .value { text-align: left; margin-left: 0; margin-top: 3px; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <div class="logo-section">
+                        <img src="${window.location.origin}${window.location.pathname.replace('index.html', '')}images/ACBlogo.png" alt="Logo" class="logo-image" onerror="this.style.display='none'">
+                    </div>
+                    <h1>Andaya-Cutanda Customs Brokerage</h1>
+                    <p>Passenger Service Calculator Receipt</p>
+                    <p>Date: ${entry.timestamp}</p>
+                </div>
+            
+            <div class="section">
+                <div class="section-title">Passenger Information</div>
+                <div class="row">
+                    <span class="label">Passenger Name:</span>
+                    <span class="value">${data.passengerName || 'N/A'}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Flight No:</span>
+                    <span class="value">${data.flightNo || 'N/A'}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Commodity:</span>
+                    <span class="value">${data.commodity || 'N/A'}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Currency:</span>
+                    <span class="value">${data.currency || 'N/A'}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Foreign Currency Value:</span>
+                    <span class="value">${formatCurrency(data.foreignValue || 0)}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Bureau of Customs ROE:</span>
+                    <span class="value">${(data.exchangeRate || 56.00).toFixed(2)}</span>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">Computation Breakdown</div>
+                <div class="row">
+                    <span class="label">Dutiable Value:</span>
+                    <span class="value">${formatCurrency(data.dutiableValue)}</span>
+                </div>
+                <div style="color: #999; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #eee;">=  ${data.foreignValue.toFixed(2)} × ${data.exchangeRate.toFixed(2)}</div>
+                <div class="row">
+                    <span class="label">Customs Duties:</span>
+                    <span class="value">${formatCurrency(data.customsDuties)}</span>
+                </div>
+                <div style="color: #999; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #eee;">= ${formatCurrency(data.dutiableValue)} × ${data.dutyRate || 0}%</div>
+                <div class="row">
+                    <span class="label">Customs Documentary Stamp:</span>
+                    <span class="value">${formatCurrency(data.docStamp)}</span>
+                </div>
+                <div style="color: #999; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #eee;">= Fixed Amount</div>
+                <div class="row">
+                    <span class="label">Import Processing Charge:</span>
+                    <span class="value">${formatCurrency(data.importProcessingCharge)}</span>
+                </div>
+                <div style="color: #999; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #eee;">= Based on DV Bracket (${formatCurrency(data.dutiableValue)})</div>
+                <div class="highlight-row">
+                    <div class="row">
+                        <span class="label">Landed Cost:</span>
+                        <span class="value">${formatCurrency(data.landedCost)}</span>
+                    </div>
+                    <div style="color: #999; font-size: 12px; padding: 4px 0; margin-top: 4px;">= ${formatCurrency(data.dutiableValue)} + ${formatCurrency(data.customsDuties)} + ${formatCurrency(data.docStamp)} + ${formatCurrency(data.importProcessingCharge)}</div>
+                </div>
+                <div class="row">
+                    <span class="label">Excise Tax:</span>
+                    <span class="value">${formatCurrency(data.exciseTax)}</span>
+                </div>
+                <div style="color: #999; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #eee;">= From Excise Input</div>
+                <div class="highlight-row">
+                    <div class="row">
+                        <span class="label">Value Added Tax (12%):</span>
+                        <span class="value">${formatCurrency(data.vat)}</span>
+                    </div>
+                    <div style="color: #999; font-size: 12px; padding: 4px 0; margin-top: 4px;">= (${formatCurrency(data.landedCost)} + ${formatCurrency(data.exciseTax)}) × 12%</div>
+                </div>
+                <div class="row">
+                    <span class="label">Surcharge (30%):</span>
+                    <span class="value">${data.includeSurcharge ? formatCurrency(data.surcharge) : '₱0.00 (Not Included)'}</span>
+                </div>
+                <div style="color: #999; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #eee;">= ${formatCurrency(data.landedCost)} × 30%</div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">Summary of Payment</div>
+                <div class="row">
+                    <span class="label">Customs Duties:</span>
+                    <span class="value">${formatCurrency(data.customsDuties)}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Value Added Tax:</span>
+                    <span class="value">${formatCurrency(data.vat)}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Customs Documentary Stamp:</span>
+                    <span class="value">${formatCurrency(data.docStamp)}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Import Processing Charge:</span>
+                    <span class="value">${formatCurrency(data.importProcessingCharge)}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Excise Tax:</span>
+                    <span class="value">${formatCurrency(data.exciseTax)}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Surcharge:</span>
+                    <span class="value">${formatCurrency(data.surcharge)}</span>
+                </div>
+                <div class="total-row">
+                    <div class="row">
+                        <span>TOTAL AMOUNT DUE:</span>
+                        <span>${formatCurrency(data.totalAmountDue)}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>This is a computer-generated receipt. For official documents, please contact our office.</p>
+            </div>
+            </div>
+            
+            <script>
+                window.addEventListener('load', function() {
+                    window.print();
+                    window.close();
+                });
+            </script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
+
+function printPassengerServiceCalculation() {
+    const passengerName = document.getElementById('ps-passenger-name').value || 'N/A';
+    const flightNo = document.getElementById('ps-flight-no').value || 'N/A';
+    const commodity = document.getElementById('ps-commodity').value || 'N/A';
+    const currency = document.getElementById('ps-currency').value || 'N/A';
+    const foreignValue = parseFloat(document.getElementById('ps-foreign-value').value) || 0;
+    const exchangeRate = parseFloat(document.getElementById('ps-exchange-rate').value) || 56.00;
+    const dutyRate = parseFloat(document.getElementById('ps-duty-rate').value) || 0;
+    
+    // Get current calculated values
+    const dutiableValue = parseFloat(document.getElementById('ps-dutiable-value').textContent.replace(/[₱,]/g, '')) || 0;
+    const customsDuties = parseFloat(document.getElementById('ps-customs-duties').textContent.replace(/[₱,]/g, '')) || 0;
+    const docStamp = parseFloat(document.getElementById('ps-doc-stamp').textContent.replace(/[₱,]/g, '')) || 0;
+    const importProcessingCharge = parseFloat(document.getElementById('ps-processing-charge').textContent.replace(/[₱,]/g, '')) || 0;
+    const landedCost = parseFloat(document.getElementById('ps-landed-cost').textContent.replace(/[₱,]/g, '')) || 0;
+    const exciseTax = parseFloat(document.getElementById('ps-excise-tax').textContent.replace(/[₱,]/g, '')) || 0;
+    const vat = parseFloat(document.getElementById('ps-vat').textContent.replace(/[₱,]/g, '')) || 0;
+    const surcharge = parseFloat(document.getElementById('ps-surcharge').textContent.replace(/[₱,]/g, '')) || 0;
+    const totalAmountDue = parseFloat(document.getElementById('ps-total-due').textContent.replace(/[₱,]/g, '')) || 0;
+    const includeSurcharge = document.getElementById('ps-include-surcharge').checked;
+    
+    const printWindow = window.open('', '', 'width=1000,height=800');
+    
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Computation Receipt - ${passengerName}</title>
+            <style>
+                * { box-sizing: border-box; }
+                html, body { 
+                    margin: 0; 
+                    padding: 0; 
+                    font-family: Arial, sans-serif; 
+                }
+                body { 
+                    margin: 10px; 
+                    padding: 10px;
+                    background-color: #fff;
+                }
+                .container {
+                    max-width: 900px;
+                    margin: 0 auto;
+                    background: white;
+                }
+                .header { 
+                    text-align: center; 
+                    margin-bottom: 20px; 
+                    border-bottom: 2px solid #333; 
+                    padding-bottom: 10px; 
+                }
+                .logo-section { 
+                    text-align: center; 
+                    margin-bottom: 5px; 
+                }
+                .logo-image { 
+                    height: 70px; 
+                    width: auto; 
+                    margin-bottom: 2px;
+                    max-width: 100%;
+                }
+                .header h1 { 
+                    margin: 5px 0 2px 0; 
+                    color: #2c3e50; 
+                    font-size: clamp(16px, 5vw, 24px);
+                }
+                .header p { 
+                    margin: 3px 0; 
+                    color: #666; 
+                    font-size: clamp(12px, 3vw, 14px);
+                }
+                .section { 
+                    margin: 15px 0; 
+                    padding: 0 10px;
+                }
+                .section-title { 
+                    font-weight: bold; 
+                    font-size: clamp(12px, 4vw, 15px);
+                    border-bottom: 1px solid #ddd; 
+                    padding-bottom: 5px; 
+                    margin-bottom: 8px; 
+                }
+                .row { 
+                    display: flex; 
+                    justify-content: space-between; 
+                    flex-wrap: wrap;
+                    padding: 6px 0; 
+                    border-bottom: 1px solid #eee; 
+                    font-size: clamp(11px, 3vw, 13px);
+                }
+                .label { 
+                    font-weight: 500;
+                    flex: 1;
+                    word-break: break-word;
+                }
+                .value { 
+                    text-align: right;
+                    margin-left: 10px;
+                    white-space: nowrap;
+                }
+                .highlight-row { 
+                    background-color: #f0f8ff; 
+                    padding: 8px; 
+                    margin: 10px 0; 
+                    border-left: 3px solid #3498db;
+                }
+                .total-row { 
+                    background-color: #f0f0f0; 
+                    padding: 8px; 
+                    font-weight: bold; 
+                    font-size: clamp(13px, 4vw, 16px);
+                    margin-top: 10px;
+                }
+                .footer { 
+                    text-align: center; 
+                    margin-top: 20px; 
+                    color: #666; 
+                    font-size: clamp(10px, 2vw, 12px);
+                }
+                
+                @media print {
+                    body { margin: 0; padding: 0; }
+                    .container { max-width: 100%; }
+                    .header { page-break-after: avoid; }
+                    .section { page-break-inside: avoid; }
+                }
+                
+                @media screen and (max-width: 768px) {
+                    body { margin: 5px; padding: 5px; }
+                    .section { padding: 0 5px; }
+                    .row { padding: 4px 0; }
+                    .value { margin-left: 5px; }
+                }
+                
+                @media screen and (max-width: 480px) {
+                    body { margin: 3px; padding: 3px; }
+                    .header { margin-bottom: 15px; }
+                    .section { padding: 0 3px; margin: 10px 0; }
+                    .row { flex-direction: column; padding: 3px 0; }
+                    .value { text-align: left; margin-left: 0; margin-top: 3px; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <div class="logo-section">
+                        <img src="${window.location.origin}${window.location.pathname.replace('index.html', '')}images/ACBlogo.png" alt="Logo" class="logo-image" onerror="this.style.display='none'">
+                    </div>
+                    <h1>Andaya-Cutanda Customs Brokerage</h1>
+                    <p>Passenger Service Calculator Receipt</p>
+                    <p>Date: ${new Date().toLocaleString('en-PH')}</p>
+                </div>
+            
+                <div class="section">
+                    <div class="section-title">Passenger Information</div>
+                    <div class="row">
+                        <span class="label">Passenger Name:</span>
+                        <span class="value">${passengerName}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Flight No:</span>
+                        <span class="value">${flightNo}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Commodity:</span>
+                        <span class="value">${commodity}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Currency:</span>
+                        <span class="value">${currency}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Foreign Currency Value:</span>
+                        <span class="value">${formatCurrency(foreignValue)}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Bureau of Customs ROE:</span>
+                        <span class="value">${exchangeRate.toFixed(2)}</span>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Computation Breakdown</div>
+                    <div class="row">
+                        <span class="label">Dutiable Value:</span>
+                        <span class="value">${formatCurrency(dutiableValue)}</span>
+                    </div>
+                    <div style="color: #999; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #eee;">= ${foreignValue.toFixed(2)} × ${exchangeRate.toFixed(2)}</div>
+                    <div class="row">
+                        <span class="label">Customs Duties:</span>
+                        <span class="value">${formatCurrency(customsDuties)}</span>
+                    </div>
+                    <div style="color: #999; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #eee;">= ${formatCurrency(dutiableValue)} × ${dutyRate}%</div>
+                    <div class="row">
+                        <span class="label">Customs Documentary Stamp:</span>
+                        <span class="value">${formatCurrency(docStamp)}</span>
+                    </div>
+                    <div style="color: #999; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #eee;">= Fixed Amount</div>
+                    <div class="row">
+                        <span class="label">Import Processing Charge:</span>
+                        <span class="value">${formatCurrency(importProcessingCharge)}</span>
+                    </div>
+                    <div style="color: #999; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #eee;">= Based on DV Bracket (${formatCurrency(dutiableValue)})</div>
+                    <div class="highlight-row">
+                        <div class="row">
+                            <span class="label">Landed Cost:</span>
+                            <span class="value">${formatCurrency(landedCost)}</span>
+                        </div>
+                        <div style="color: #999; font-size: 12px; padding: 4px 0; margin-top: 4px;">= ${formatCurrency(dutiableValue)} + ${formatCurrency(customsDuties)} + ${formatCurrency(docStamp)} + ${formatCurrency(importProcessingCharge)}</div>
+                    </div>
+                    <div class="row">
+                        <span class="label">Excise Tax:</span>
+                        <span class="value">${formatCurrency(exciseTax)}</span>
+                    </div>
+                    <div style="color: #999; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #eee;">= From Excise Input</div>
+                    <div class="highlight-row">
+                        <div class="row">
+                            <span class="label">Value Added Tax (12%):</span>
+                            <span class="value">${formatCurrency(vat)}</span>
+                        </div>
+                        <div style="color: #999; font-size: 12px; padding: 4px 0; margin-top: 4px;">= (${formatCurrency(landedCost)} + ${formatCurrency(exciseTax)}) × 12%</div>
+                    </div>
+                    <div class="row">
+                        <span class="label">Surcharge (30%):</span>
+                        <span class="value">${includeSurcharge ? formatCurrency(surcharge) : '₱0.00 (Not Included)'}</span>
+                    </div>
+                    <div style="color: #999; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #eee;">= ${formatCurrency(landedCost)} × 30%</div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Summary of Payment</div>
+                    <div class="row">
+                        <span class="label">Customs Duties:</span>
+                        <span class="value">${formatCurrency(customsDuties)}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Value Added Tax:</span>
+                        <span class="value">${formatCurrency(vat)}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Customs Documentary Stamp:</span>
+                        <span class="value">${formatCurrency(docStamp)}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Import Processing Charge:</span>
+                        <span class="value">${formatCurrency(importProcessingCharge)}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Excise Tax:</span>
+                        <span class="value">${formatCurrency(exciseTax)}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Surcharge:</span>
+                        <span class="value">${formatCurrency(surcharge)}</span>
+                    </div>
+                    <div class="total-row">
+                        <div class="row">
+                            <span>TOTAL AMOUNT DUE:</span>
+                            <span>${formatCurrency(totalAmountDue)}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <p>This is a computer-generated receipt. For official documents, please contact our office.</p>
+                </div>
+            </div>
+            
+            <script>
+                window.addEventListener('load', function() {
+                    window.print();
+                    window.close();
+                });
+            </script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
+
+// Initialize dashboard on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateDate();
+    setupSidebarToggle();
+    setupSidebarNavigation();
+    setupViewAllButton();
+    setupCardInteractions();
+    setupTableInteractions();
+    setupCalculatorCards();
+    displayComputationHistory();
+    initializeLogin();
+    showLoginOverlay();
+    
+    // Animate metrics with a slight delay
+    setTimeout(animateMetrics, 300);
+});
+
+// Update date every minute
+setInterval(updateDate, 60000);
+
+// Login overlay functions
+function showLoginOverlay() {
+    const loginOverlay = document.getElementById('login-overlay');
+    if (loginOverlay) {
+        loginOverlay.style.display = 'flex';
+    }
+}
+
+function hideLoginOverlay() {
+    const loginOverlay = document.getElementById('login-overlay');
+    if (loginOverlay) {
+        loginOverlay.style.display = 'none';
+    }
+}
+
+function initializeLogin() {
+    const loginForm = document.getElementById('login-form');
+    const loginError = document.getElementById('login-error');
+
+    if (!loginForm) return;
+
+    loginForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const username = document.getElementById('login-username').value.trim();
+        const password = document.getElementById('login-password').value.trim();
+
+        // Change credentials as needed
+        const validUsername = 'Dreijao.234';
+        const validPassword = 'Dextercutandaja345';
+
+        if (username === validUsername && password === validPassword) {
+            hideLoginOverlay();
+            if (loginError) loginError.style.display = 'none';
+        } else {
+            if (loginError) loginError.style.display = 'block';
+        }
+    });
+}
+
+// ==========================================
+// EXCISE TAX CALCULATOR FUNCTIONS
+// ==========================================
+
+function calculateDistilledSpirits() {
+    const totalLiters = parseFloat(document.getElementById('ds-total-liters').value) || 0;
+    const proof = parseFloat(document.getElementById('ds-proof').value) || 0;
+    const totalBottles = parseFloat(document.getElementById('ds-total-bottles').value) || 0;
+    const nrpBottle = parseFloat(document.getElementById('ds-nrp-bottle').value) || 0;
+
+    // ST = Total Liters × Proof% × ₱74.16
+    const st = totalLiters * (proof / 100) * 74.16;
+
+    // AVT = Total Bottles × NRP/Bottle × Proof% × 22%
+    const avt = totalBottles * nrpBottle * (proof / 100) * 0.22;
+
+    // Total Excise = ST + AVT
+    const total = st + avt;
+
+    // Display results
+    document.getElementById('ds-st').textContent = formatCurrencyWholeNumber(st);
+    document.getElementById('ds-st-formula').textContent = `= ${totalLiters.toFixed(2)} × ${proof.toFixed(2)}% × ₱74.16`;
+    document.getElementById('ds-avt').textContent = formatCurrencyWholeNumber(avt);
+    document.getElementById('ds-avt-formula').textContent = `= ${totalBottles} × ${formatCurrency(nrpBottle)} × ${proof.toFixed(2)}% × 22%`;
+    document.getElementById('ds-total').textContent = formatCurrencyWholeNumber(total);
+    document.getElementById('ds-total-formula').textContent = `= ${formatCurrencyWholeNumber(st)} + ${formatCurrencyWholeNumber(avt)}`;
+    document.getElementById('ds-total-display').textContent = formatCurrencyWholeNumber(total);
+
+    document.getElementById('ds-results').style.display = 'block';
+
+    saveToHistory('excise-distilled-spirits', {
+        totalLiters,
+        proof,
+        totalBottles,
+        nrpBottle,
+        st,
+        avt,
+        total
+    });
+}
+
+function calculateWines() {
+    const totalLiters = parseFloat(document.getElementById('wines-total-liters').value) || 0;
+
+    // Excise = Total Liters × ₱70.92
+    const excise = totalLiters * 70.92;
+
+    // Display results
+    document.getElementById('wines-total').textContent = formatCurrencyWholeNumber(excise);
+    document.getElementById('wines-formula').textContent = `= ${totalLiters.toFixed(2)} × ₱70.92`;
+    document.getElementById('wines-total-display').textContent = formatCurrencyWholeNumber(excise);
+
+    document.getElementById('wines-results').style.display = 'block';
+
+    saveToHistory('excise-wines', {
+        totalLiters,
+        excise
+    });
+}
+
+function calculateFermentedLiquor() {
+    const totalLiters = parseFloat(document.getElementById('fl-total-liters').value) || 0;
+
+    // Excise = Total Liters × ₱48.31
+    const excise = totalLiters * 48.31;
+
+    // Display results
+    document.getElementById('fl-total').textContent = formatCurrencyWholeNumber(excise);
+    document.getElementById('fl-formula').textContent = `= ${totalLiters.toFixed(2)} × ₱48.31`;
+    document.getElementById('fl-total-display').textContent = formatCurrencyWholeNumber(excise);
+
+    document.getElementById('fl-results').style.display = 'block';
+
+    saveToHistory('excise-fermented-liquor', {
+        totalLiters,
+        excise
+    });
+}
+
+function calculateEthylAlcohol() {
+    const totalLiters = parseFloat(document.getElementById('ea-total-liters').value) || 0;
+    const proof = parseFloat(document.getElementById('ea-proof').value) || 0;
+    const dv = parseFloat(document.getElementById('ea-dv').value) || 0;
+
+    // ST = Total Liters × Proof% × ₱74.16
+    const st = totalLiters * (proof / 100) * 74.16;
+
+    // AVT = DV × Proof% × 22%
+    const avt = dv * (proof / 100) * 0.22;
+
+    // Total Excise = ST + AVT
+    const total = st + avt;
+
+    // Display results
+    document.getElementById('ea-st').textContent = formatCurrencyWholeNumber(st);
+    document.getElementById('ea-st-formula').textContent = `= ${totalLiters.toFixed(2)} × ${proof.toFixed(2)}% × ₱74.16`;
+    document.getElementById('ea-avt').textContent = formatCurrencyWholeNumber(avt);
+    document.getElementById('ea-avt-formula').textContent = `= ${formatCurrency(dv)} × ${proof.toFixed(2)}% × 22%`;
+    document.getElementById('ea-total').textContent = formatCurrencyWholeNumber(total);
+    document.getElementById('ea-total-formula').textContent = `= ${formatCurrencyWholeNumber(st)} + ${formatCurrencyWholeNumber(avt)}`;
+    document.getElementById('ea-total-display').textContent = formatCurrencyWholeNumber(total);
+
+    document.getElementById('ea-results').style.display = 'block';
+
+    saveToHistory('excise-ethyl-alcohol', {
+        totalLiters,
+        proof,
+        dv,
+        st,
+        avt,
+        total
+    });
+}
+
+function calculateMetallicMinerals() {
+    const dv = parseFloat(document.getElementById('mm-dv').value) || 0;
+
+    // Excise = DV × 4%
+    const excise = dv * 0.04;
+
+    // Display results
+    document.getElementById('mm-total').textContent = formatCurrencyWholeNumber(excise);
+    document.getElementById('mm-formula').textContent = `= ${formatCurrency(dv)} × 4%`;
+    document.getElementById('mm-total-display').textContent = formatCurrencyWholeNumber(excise);
+
+    document.getElementById('mm-results').style.display = 'block';
+
+    saveToHistory('excise-metallic-minerals', {
+        dv,
+        excise
+    });
+}
+
+function calculateNonEssentials() {
+    const dv = parseFloat(document.getElementById('ne-dv').value) || 0;
+
+    // Excise = DV × 20%
+    const excise = dv * 0.20;
+
+    // Display results
+    document.getElementById('ne-total').textContent = formatCurrencyWholeNumber(excise);
+    document.getElementById('ne-formula').textContent = `= ${formatCurrency(dv)} × 20%`;
+    document.getElementById('ne-total-display').textContent = formatCurrencyWholeNumber(excise);
+
+    document.getElementById('ne-results').style.display = 'block';
+
+    saveToHistory('excise-non-essentials', {
+        dv,
+        excise
+    });
+}
+
+function calculateCigarettes() {
+    const totalPacks = parseFloat(document.getElementById('cig-total-packs').value) || 0;
+
+    // Excise = Total Packs × ₱72.9303
+    const excise = totalPacks * 72.9303;
+
+    // Display results
+    document.getElementById('cig-total').textContent = formatCurrencyWholeNumber(excise);
+    document.getElementById('cig-formula').textContent = `= ${totalPacks} × ₱72.9303`;
+    document.getElementById('cig-total-display').textContent = formatCurrencyWholeNumber(excise);
+
+    document.getElementById('cig-results').style.display = 'block';
+
+    saveToHistory('excise-cigarettes', {
+        totalPacks,
+        excise
+    });
+}
+
+function calculateCigars() {
+    const totalCigars = parseFloat(document.getElementById('cigars-total').value) || 0;
+    const nrpCigar = parseFloat(document.getElementById('cigars-nrp').value) || 0;
+
+    // AVT = Total Cigars × NRP/Cigar × 0.20
+    const avt = totalCigars * nrpCigar * 0.20;
+
+    // ST = Total Cigars × ₱8.9716
+    const st = totalCigars * 8.9716;
+
+    // Total Excise = AVT + ST
+    const total = avt + st;
+
+    // Display results
+    document.getElementById('cigars-avt').textContent = formatCurrencyWholeNumber(avt);
+    document.getElementById('cigars-avt-formula').textContent = `= ${totalCigars} × ${formatCurrencyWholeNumber(nrpCigar)} × 0.20`;
+    document.getElementById('cigars-st').textContent = formatCurrencyWholeNumber(st);
+    document.getElementById('cigars-st-formula').textContent = `= ${totalCigars} × ₱8.9716`;
+    document.getElementById('cigars-total').textContent = formatCurrencyWholeNumber(total);
+    document.getElementById('cigars-total-formula').textContent = `= ${formatCurrencyWholeNumber(avt)} + ${formatCurrencyWholeNumber(st)}`;
+    document.getElementById('cigars-total-display').textContent = formatCurrencyWholeNumber(total);
+
+    document.getElementById('cigars-results').style.display = 'block';
+
+    saveToHistory('excise-cigars', {
+        totalCigars,
+        nrpCigar,
+        avt,
+        st,
+        total
+    });
+}
+
+function resetAllExciseCalculators() {
+    // Reset all input fields
+    const inputs = document.querySelectorAll('#excise-calculator-modal input');
+    inputs.forEach(input => input.value = '');
+
+    // Hide all results sections
+    const results = document.querySelectorAll('#excise-calculator-modal .results-section');
+    results.forEach(result => result.style.display = 'none');
+}
+
+// HS Code Finder helper functions
+function calculateHSCodeFinder() {
+    const description = document.getElementById('hscf-description').value.trim();
+    const country = document.getElementById('hscf-country').value;
+    const resultWrapper = document.getElementById('hscf-result');
+    const resultCommodity = document.getElementById('hscf-result-commodity');
+    const resultCountry = document.getElementById('hscf-result-country');
+    const resultHs = document.getElementById('hscf-result-hs');
+    const resultDuty = document.getElementById('hscf-result-duty');
+
+    if (!description) {
+        alert('Please enter a commodity description.');
+        return;
+    }
+
+    const hsCode = getHSCodeByDescription(description);
+    const rate = hsCode ? getTariffRateByHS(hsCode, country) : null;
+
+    resultCommodity.textContent = description;
+    resultCountry.textContent = country;
+    resultHs.textContent = hsCode || 'Not found';
+    resultDuty.textContent = rate !== null ? rate + '%' : 'N/A';
+    resultWrapper.style.display = 'block';
+
+    saveToHistory('hs-code-finder', {
+        description,
+        country,
+        hsCode,
+        rate,
+        computedAt: new Date().toLocaleString('en-PH')
+    });
+}
+
+function getHSCodeByDescription(description) {
+    const descriptions = {
+        'Rice (semi-milled or wholly milled)': '1006.30',
+        'Coffee, not roasted, not decaffeinated': '0901.11',
+        'Wooden furniture for household, kitchen use': '9403.20'
+    };
+
+    const normalized = description.toLowerCase().trim();
+    for (const [desc, code] of Object.entries(descriptions)) {
+        if (desc.toLowerCase().includes(normalized) || normalized.includes(desc.toLowerCase())) {
+            return code;
+        }
+    }
+    return null;
+}
+

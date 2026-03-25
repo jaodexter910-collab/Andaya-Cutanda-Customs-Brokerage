@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andaya-Cutanda Customs Brokerage Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="login-overlay">
+        <div class="login-card">
+            <div class="login-logo-section">
+                <img src="images/logo only.png" alt="Andaya-Cutanda Logo" class="login-logo-image">
+            </div>
+            <h2>Login to Dashboard</h2>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="login-btn">Login</button>
+                </div>
+                <p id="login-error" class="login-error" style="display:none;">Invalid credentials. Please try again.</p>
+            </form>
+            
+            <div class="login-tagline">
+                <p>Where Speed, Accuracy, and Trust Define Every Clearance.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="images/logo only.png" alt="Andaya-Cutanda Logo" class="logo-image">
+                <div class="logo-text">
+                    <h1>Andaya-Cutanda</h1>
+                    <p class="tagline">Customs Brokerage</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="profile-section" id="profile-section">
+                    <span id="profile-display">Not logged in</span>
+                    <button id="profile-change-password-btn" class="login-btn secondary" style="display:none;">Change Password</button>
+                    <button id="profile-login-btn" class="login-btn secondary">Login</button>
+                    <button id="profile-logout-btn" class="login-btn secondary" style="display:none;">Logout</button>
+                </div>
+                <button class="toggle-sidebar" id="toggleSidebar">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="#dashboard" class="sidebar-link active">Dashboard</a></li>
+            <li><a href="#calculators" class="sidebar-link">Calculators</a></li>
+            <li><a href="#hs-code-finder" class="sidebar-link">HS Code Finder</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Dashboard Section -->
+        <section id="dashboard-content" class="section-content active">
+            <!-- Header Section -->
+            <section class="header-section">
+                <h2>Dashboard</h2>
+                <p class="date-info" id="dateInfo"></p>
+            </section>
+
+            <!-- About Section -->
+            <section class="about-section">
+                <h3>About Us</h3>
+                <div class="about-content">
+                    <h4>Andaya–Cutanda Customs Brokerage — Where Speed, Accuracy, and Trust Define Every Clearance.</h4>
+                    
+                    <p>In today's fast-moving trade environment, every second counts—and so does every detail. At Andaya–Cutanda Customs Brokerage, we position ourselves as your reliable customs specialist, committed to delivering seamless, efficient, and fully compliant customs clearance services.</p>
+
+                    <p>We understand that customs procedures can be complex, time-sensitive, and critical to your operations. That's why our team is dedicated to managing every stage of the clearance process with precision—from documentation review and tariff classification to duty computation and regulatory compliance. Our goal is simple: to eliminate delays, reduce risks, and ensure your shipments move without interruption.</p>
+
+                    <p><strong>With a strong focus on professionalism and accountability, we provide:</strong></p>
+                    <ul class="about-list">
+                        <li>Fast and efficient processing to minimize clearance time</li>
+                        <li>Accurate documentation and compliance with all customs regulations</li>
+                        <li>Transparent coordination and updates throughout the process</li>
+                        <li>Client-focused solutions tailored to your specific import and export needs</li>
+                    </ul>
+
+                    <p>At Andaya–Cutanda Customs Brokerage, we don't just clear shipments—we build lasting partnerships by delivering dependable service you can trust. We take pride in being proactive, detail-oriented, and results-driven, ensuring that your cargo reaches its destination smoothly and on time.</p>
+
+                    <p><em>Because your business deserves a customs partner that prioritizes excellence at every step.</em></p>
+                </div>
+            </section>
+
+            <!-- Activity History -->
+            <section class="dashboard-section">
+                <h3>Activity History</h3>
+                <div class="activity-timeline" id="activity-timeline">
+                    <div class="activity-placeholder">
+                        <p style="text-align: center; color: #999;">Activities from Calculator and HS Code Finder will appear here</p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Calculators Section -->
+        <section id="calculators-content" class="section-content">
+            <section class="header-section">
+                <h2>Calculators</h2>
+                <p class="date-info">Select a calculator to get started</p>
+            </section>
+
+            <div class="calculators-grid">
+                <div class="calculator-card" data-calculator="passenger">
+                    <div class="calc-icon">👤</div>
+                    <h3>Passenger Service</h3>
+                    <p>Calculate passenger service fees and charges</p>
+                    <button class="calc-btn">Open Calculator</button>
+                </div>
+
+                <div class="calculator-card" data-calculator="excise">
+                    <div class="calc-icon">💳</div>
+                    <h3>Excise Tax</h3>
+                    <p>Calculate excise tax on imports</p>
+                    <button class="calc-btn">Open Calculator</button>
+                </div>
+
+                <div class="calculator-card" data-calculator="formal-sea">
+                    <div class="calc-icon">🚢</div>
+                    <h3>Formal Entry Sea</h3>
+                    <p>Calculate formal entry fees for sea shipments</p>
+                    <button class="calc-btn">Open Calculator</button>
+                </div>
+
+                <div class="calculator-card" data-calculator="informal-sea">
+                    <div class="calc-icon">⛵</div>
+                    <h3>Informal Entry Sea</h3>
+                    <p>Calculate informal entry fees for sea shipments</p>
+                    <button class="calc-btn">Open Calculator</button>
+                </div>
+
+                <div class="calculator-card" data-calculator="formal-air">
+                    <div class="calc-icon">✈️</div>
+                    <h3>Formal Entry Air</h3>
+                    <p>Calculate formal entry fees for air shipments</p>
+                    <button class="calc-btn">Open Calculator</button>
+                </div>
+
+                <div class="calculator-card" data-calculator="informal-air">
+                    <div class="calc-icon">🛫</div>
+                    <h3>Informal Entry Air</h3>
+                    <p>Calculate informal entry fees for air shipments</p>
+                    <button class="calc-btn">Open Calculator</button>
+                </div>
+
+                <div class="calculator-card" data-calculator="de-minimis">
+                    <div class="calc-icon">📦</div>
+                    <h3>De Miminimis</h3>
+                    <p>Calculate de minimis valuation threshold</p>
+                    <button class="calc-btn">Open Calculator</button>
+                </div>
+            </div>
+        </section>
+        <!-- HS Code Finder Section -->
+        <section id="hs-code-finder-content" class="section-content">
+            <section class="header-section">
+                <h2>HS Code Finder</h2>
+                <p class="date-info">Enter commodity description to find the corresponding HS code from Philippine Tariff Book 2022</p>
+            </section>
+
+            <div class="hs-code-finder-card">
+                <div class="form-group">
+                    <label for="hscf-description">Commodity Description</label>
+                    <input type="text" id="hscf-description" placeholder="e.g. Rice, Coffee, Furniture" maxlength="100">
+                </div>
+                <button class="calculate-btn" id="hscf-button" onclick="calculateHSCodeFinder()">Find HS Code</button>
+                <div id="hscf-loading" style="display:none; text-align:center; margin:10px 0;">Searching Philippine Tariff Book database...</div>
+
+                <div id="hscf-result" class="hs-code-result" style="display:none; margin-top:15px;">
+                    <h3>HS Code Result</h3>
+                    <div class="row"><span class="label">Commodity:</span><span id="hscf-result-commodity"></span></div>
+                    <div class="row"><span class="label">HS Code:</span><span id="hscf-result-hs"></span></div>
+                </div>
+            </div>
+        </section>    </div>
+
+    <!-- Change Password Modal -->
+    <div id="change-password-modal" class="calculator-modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Change Password</h2>
+            
+            <div class="calculator-wrapper">
+                <form id="change-password-form">
+                    <div class="form-group">
+                        <label for="current-password">Current Password</label>
+                        <input type="password" id="current-password" placeholder="Enter current password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password" placeholder="Enter new password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm New Password</label>
+                        <input type="password" id="confirm-password" placeholder="Confirm new password" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="calc-compute-btn">Change Password</button>
+                    </div>
+                    <p id="change-password-error" class="login-error" style="display:none;"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calculator Modals -->
+    <!-- Passenger Service Calculator Modal -->
+    <div id="passenger-calculator-modal" class="calculator-modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Passenger Service Calculator</h2>
+            
+            <div class="calculator-wrapper">
+                <!-- Input Section -->
+                <div class="calculator-inputs">
+                    <h3>Input Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="ps-passenger-name">Name of the Passenger</label>
+                        <input type="text" id="ps-passenger-name" placeholder="Enter passenger name" maxlength="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ps-flight-no">Flight No.</label>
+                        <input type="text" id="ps-flight-no" placeholder="Enter flight number" maxlength="50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ps-commodity">Commodity</label>
+                        <input type="text" id="ps-commodity" placeholder="Enter commodity description" maxlength="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ps-currency">Currency</label>
+                        <select id="ps-currency">
+                            <option value="">-- Select Currency --</option>
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - British Pound</option>
+                            <option value="JPY">JPY - Japanese Yen</option>
+                            <option value="CHF">CHF - Swiss Franc</option>
+                            <option value="CNY">CNY - Chinese Yuan</option>
+                            <option value="INR">INR - Indian Rupee</option>
+                            <option value="AUD">AUD - Australian Dollar</option>
+                            <option value="CAD">CAD - Canadian Dollar</option>
+                            <option value="SGD">SGD - Singapore Dollar</option>
+                            <option value="PHP">PHP - Philippine Peso</option>
+                            <option value="HKD">HKD - Hong Kong Dollar</option>
+                            <option value="KRW">KRW - South Korean Won</option>
+                            <option value="THB">THB - Thai Baht</option>
+                            <option value="MYR">MYR - Malaysian Ringgit</option>
+                            <option value="IDR">IDR - Indonesian Rupiah</option>
+                            <option value="VND">VND - Vietnamese Dong</option>
+                            <option value="TWD">TWD - Taiwan Dollar</option>
+                            <option value="BRL">BRL - Brazilian Real</option>
+                            <option value="MXN">MXN - Mexican Peso</option>
+                            <option value="AED">AED - UAE Dirham</option>
+                            <option value="SAR">SAR - Saudi Riyal</option>
+                            <option value="TRY">TRY - Turkish Lira</option>
+                            <option value="ZAR">ZAR - South African Rand</option>
+                            <option value="NZD">NZD - New Zealand Dollar</option>
+                            <option value="SEK">SEK - Swedish Krona</option>
+                            <option value="NOK">NOK - Norwegian Krone</option>
+                            <option value="DKK">DKK - Danish Krone</option>
+                            <option value="HUF">HUF - Hungarian Forint</option>
+                            <option value="CZK">CZK - Czech Koruna</option>
+                            <option value="PLN">PLN - Polish Zloty</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ps-foreign-value">Value in Foreign Currency</label>
+                        <input type="number" id="ps-foreign-value" placeholder="0.00" step="0.01" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ps-exchange-rate">Bureau of Customs ROE</label>
+                        <input type="number" id="ps-exchange-rate" placeholder="56.00" step="0.01" min="0" value="56.00">
+                        <small>Current typical rate: ₱56 per USD</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ps-duty-rate">Rate of Duty (%) - Based on AHTN</label>
+                        <input type="number" id="ps-duty-rate" placeholder="0.00" step="0.01" min="0" max="100">
+                        <small>Enter the duty percentage based on AHTN classification</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ps-excise-amount">Excise Tax Amount (Php)</label>
+                        <input type="number" id="ps-excise-amount" placeholder="0.00" step="0.01" min="0">
+                        <small>Reference: Use Excise Tax Calculator</small>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="ps-include-surcharge" checked>
+                            <span>Include Surcharge (30% of Landed Cost)</span>
+                        </label>
+                    </div>
+
+                    <button class="calc-compute-btn" onclick="calculatePassengerService()">Calculate</button>
+                </div>
+
+                <!-- Results Section -->
+                <div class="calculator-results">
+                    <h3>Computation Breakdown</h3>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Dutiable Value</span>
+                        <span class="result-value" id="ps-dutiable-value">₱0.00</span>
+                        <span class="result-formula" id="ps-dutiable-value-formula">= 0.00 × 56.00</span>
+                    </div>
+
+                    <div class="result-item">
+                        <span class="result-label">Customs Duties</span>
+                        <span class="result-value" id="ps-customs-duties">₱0.00</span>
+                        <span class="result-formula" id="ps-customs-duties-formula">= ₱0.00 × 0%</span>
+                    </div>
+
+                    <div class="result-item">
+                        <span class="result-label">Customs Documentary Stamp</span>
+                        <span class="result-value" id="ps-doc-stamp">₱130.00</span>
+                        <span class="result-formula" id="ps-doc-stamp-formula">= Fixed Amount</span>
+                    </div>
+
+                    <div class="result-item">
+                        <span class="result-label">Import Processing Charge</span>
+                        <span class="result-value" id="ps-processing-charge">₱0.00</span>
+                        <span class="result-formula" id="ps-processing-charge-formula">= Based on DV Bracket</span>
+                    </div>
+
+                    <div class="result-item highlight">
+                        <span class="result-label">Landed Cost</span>
+                        <span class="result-value" id="ps-landed-cost">₱0.00</span>
+                        <span class="result-formula" id="ps-landed-cost-formula">= DV + Duties + Stamp + IPC</span>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="result-item">
+                        <span class="result-label">Excise Tax</span>
+                        <span class="result-value" id="ps-excise-tax">₱0.00</span>
+                        <span class="result-formula" id="ps-excise-tax-formula">= From Excise Input</span>
+                    </div>
+
+                    <div class="result-item highlight">
+                        <span class="result-label">Value Added Tax (12%)</span>
+                        <span class="result-value" id="ps-vat">₱0.00</span>
+                        <span class="result-formula" id="ps-vat-formula">= (LC + Excise) × 12%</span>
+                    </div>
+
+                    <div class="result-item">
+                        <span class="result-label">Surcharge (30% of Landed Cost)</span>
+                        <span class="result-value" id="ps-surcharge">₱0.00</span>
+                        <span class="result-formula" id="ps-surcharge-formula">= LC × 30%</span>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <h4>Summary of Payment Breakdown</h4>
+                    
+                    <div class="payment-summary">
+                        <div class="payment-item">
+                            <span>Customs Duties</span>
+                            <span id="ps-summary-duties">₱0.00</span>
+                        </div>
+                        <div class="payment-item">
+                            <span>Value Added Tax</span>
+                            <span id="ps-summary-vat">₱0.00</span>
+                        </div>
+                        <div class="payment-item">
+                            <span>Customs Documentary Stamp</span>
+                            <span id="ps-summary-stamp">₱130.00</span>
+                        </div>
+                        <div class="payment-item">
+                            <span>Import Processing Charge</span>
+                            <span id="ps-summary-charge">₱0.00</span>
+                        </div>
+                        <div class="payment-item">
+                            <span>Excise Tax</span>
+                            <span id="ps-summary-excise">₱0.00</span>
+                        </div>
+                        <div class="payment-item">
+                            <span>Surcharge</span>
+                            <span id="ps-summary-surcharge">₱0.00</span>
+                        </div>
+                        <div class="payment-total">
+                            <span>Total Amount Due</span>
+                            <span id="ps-total-due">₱0.00</span>
+                        </div>
+                    </div>
+
+                    <button class="reset-btn" onclick="resetPassengerServiceCalculator()">Reset</button>
+                    <button class="print-btn" onclick="printPassengerServiceCalculation()">Print Result</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formal Entry Sea Calculator Modal -->
+    <div id="formal-sea-calculator-modal" class="calculator-modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Formal Entry Sea Calculator</h2>
+            <div class="calculator-wrapper">
+                <div class="calculator-inputs">
+                    <h3>Inputs</h3>
+                    <div class="form-group">
+                        <label for="fs-consignee">Name of Consignee</label>
+                        <input type="text" id="fs-consignee" placeholder="Consignee Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-commodity">Commodity</label>
+                        <input type="text" id="fs-commodity" placeholder="Commodity Description">
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-rate-duty">Rate of Duty (%)</label>
+                        <input type="number" id="fs-rate-duty" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-incoterm">Incoterm Used</label>
+                        <select id="fs-incoterm">
+                            <option value="EXW">EXW</option>
+                            <option value="FOB">FOB</option>
+                            <option value="FCA">FCA</option>
+                            <option value="FAS">FAS</option>
+                            <option value="CIP">CIP</option>
+                            <option value="CIF">CIF</option>
+                            <option value="CPT">CPT</option>
+                            <option value="CFR">CFR</option>
+                            <option value="DAP">DAP</option>
+                            <option value="DDP">DDP</option>
+                            <option value="DPU">DPU</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-is-lc">Is it under L/C?</label>
+                        <select id="fs-is-lc">
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="fs-lc-value-group" style="display:none;">
+                        <label for="fs-lc-value">L/C Value (₱)</label>
+                        <input type="number" id="fs-lc-value" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-currency">Currency Used</label>
+                        <select id="fs-currency">
+                            <option value="PHP">PHP - Philippine Peso</option>
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - British Pound</option>
+                            <option value="JPY">JPY - Japanese Yen</option>
+                            <option value="AUD">AUD - Australian Dollar</option>
+                            <option value="CAD">CAD - Canadian Dollar</option>
+                            <option value="CHF">CHF - Swiss Franc</option>
+                            <option value="CNY">CNY - Chinese Yuan</option>
+                            <option value="SGD">SGD - Singapore Dollar</option>
+                            <option value="HKD">HKD - Hong Kong Dollar</option>
+                            <option value="KRW">KRW - South Korean Won</option>
+                            <option value="TWD">TWD - Taiwan Dollar</option>
+                            <option value="NZD">NZD - New Zealand Dollar</option>
+                            <option value="SEK">SEK - Swedish Krona</option>
+                            <option value="NOK">NOK - Norwegian Krone</option>
+                            <option value="DKK">DKK - Danish Krone</option>
+                            <option value="INR">INR - Indian Rupee</option>
+                            <option value="BRL">BRL - Brazilian Real</option>
+                            <option value="MXN">MXN - Mexican Peso</option>
+                            <option value="ZAR">ZAR - South African Rand</option>
+                            <option value="AED">AED - UAE Dirham</option>
+                            <option value="SAR">SAR - Saudi Riyal</option>
+                            <option value="THB">THB - Thai Baht</option>
+                            <option value="MYR">MYR - Malaysian Ringgit</option>
+                            <option value="IDR">IDR - Indonesian Rupiah</option>
+                            <option value="VND">VND - Vietnamese Dong</option>
+                            <option value="TRY">TRY - Turkish Lira</option>
+                            <option value="PLN">PLN - Polish Zloty</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-roe">Bureau of Customs ROE</label>
+                        <input type="number" id="fs-roe" min="0" step="0.0001" value="56.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-fob">FOB Value (in foreign currency)</label>
+                        <input type="number" id="fs-fob" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-insurance-type">Insurance</label>
+                        <select id="fs-insurance-type">
+                            <option value="0">None</option>
+                            <option value="0.02">2%</option>
+                            <option value="0.04">4%</option>
+                            <option value="manual">Manual</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="fs-insurance-manual-group" style="display:none;">
+                        <label for="fs-insurance-manual">Insurance Value (₱)</label>
+                        <input type="number" id="fs-insurance-manual" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-freight">Freight (in foreign currency)</label>
+                        <input type="number" id="fs-freight" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-container-type">Container Type</label>
+                        <select id="fs-container-type">
+                            <option value="20">20 footer</option>
+                            <option value="40">40 footer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-container-count">Total No. of Containers</label>
+                        <input type="number" id="fs-container-count" min="0" step="1" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-arrastre">Arrastre Charge (₱)</label>
+                        <input type="number" id="fs-arrastre" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-wharfage">Wharfage Due (₱)</label>
+                        <input type="number" id="fs-wharfage" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-advance-deposit">Advance Deposit / Duty (₱)</label>
+                        <input type="number" id="fs-advance-deposit" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-excise-tax">Excise Tax (₱)</label>
+                        <input type="number" id="fs-excise-tax" min="0" step="0.01" value="0">
+                    </div>
+                    <button class="calc-compute-btn" onclick="calculateFormalSea()">Calculate</button>
+                </div>
+
+                <div class="calculator-results">
+                    <h3>Computation Breakdown</h3>
+                    <div class="result-item"><span class="result-label">CIF Value</span><span class="result-value" id="fs-cif">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Dutiable Value</span><span class="result-value" id="fs-dv">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Customs Duty</span><span class="result-value" id="fs-customs-duty">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Bank Charge</span><span class="result-value" id="fs-bank-charge">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Brokerage Fee</span><span class="result-value" id="fs-brokerage">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Arrastre Charge</span><span class="result-value" id="fs-arrastre-out">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Wharfage Due</span><span class="result-value" id="fs-wharfage-out">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Import Processing Charge</span><span class="result-value" id="fs-import-processing">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Documentary Stamp</span><span class="result-value" id="fs-doc-stamp">₱130.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Total Landed Cost</span><span class="result-value" id="fs-total-landed">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">VAT Base</span><span class="result-value" id="fs-vat-base">₱0.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Value Added Tax (12%)</span><span class="result-value" id="fs-vat">₱0.00</span></div>
+
+                    <h4 style="margin:20px 0 10px;">Summary of Payment Breakdown</h4>
+                    <div class="result-item"><span class="result-label">Customs Duty</span><span class="result-value" id="fs-summary-customs-duty">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Value Added Tax</span><span class="result-value" id="fs-summary-vat">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Excise Tax</span><span class="result-value" id="fs-summary-excise">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Import Processing Charge</span><span class="result-value" id="fs-summary-ipc">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Documentary Stamp</span><span class="result-value" id="fs-summary-doc-stamp">₱130.00</span></div>
+                    <div class="result-item"><span class="result-label">Container Security Fee</span><span class="result-value" id="fs-summary-csfe">₱0.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Total Duties, Taxes & Other Charges</span><span class="result-value" id="fs-total-charges">₱0.00</span></div>
+
+                    <div class="result-item"><span class="result-label">Less Advance Deposit</span><span class="result-value" id="fs-advance-deposit-out">₱0.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Net Amount Payable</span><span class="result-value" id="fs-net-payable">₱0.00</span></div>
+                </div>
+            </div>
+            <button class="reset-btn" onclick="resetFormalSeaCalculator()">Reset</button>
+            <button class="print-btn" onclick="printFormalSeaCalculation()">Print</button>
+        </div>
+    </div>
+
+    <!-- Formal Entry Air Calculator Modal -->
+    <div id="formal-air-calculator-modal" class="calculator-modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Formal Entry Air Calculator</h2>
+            <div class="calculator-wrapper">
+                <div class="calculator-inputs">
+                    <h3>Inputs</h3>
+                    <div class="form-group">
+                        <label for="fa-consignee">Name of Consignee</label>
+                        <input type="text" id="fa-consignee" placeholder="Consignee Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="fa-commodity">Commodity</label>
+                        <input type="text" id="fa-commodity" placeholder="Commodity Description">
+                    </div>
+                    <div class="form-group">
+                        <label for="fa-rate-duty">Rate of Duty (%)</label>
+                        <input type="number" id="fa-rate-duty" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fa-incoterm">Incoterm Used</label>
+                        <select id="fa-incoterm">
+                            <option value="EXW">EXW</option>
+                            <option value="FOB">FOB</option>
+                            <option value="FCA">FCA</option>
+                            <option value="FAS">FAS</option>
+                            <option value="CIP">CIP</option>
+                            <option value="CIF">CIF</option>
+                            <option value="CPT">CPT</option>
+                            <option value="CFR">CFR</option>
+                            <option value="DAP">DAP</option>
+                            <option value="DDP">DDP</option>
+                            <option value="DPU">DPU</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fa-is-lc">Is it under L/C?</label>
+                        <select id="fa-is-lc">
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="fa-advance-deposit-lc-group" style="display:none;">
+                        <label for="fa-advance-deposit-lc">Advance Deposit Under L/C (₱)</label>
+                        <input type="number" id="fa-advance-deposit-lc" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fa-currency">Currency Used</label>
+                        <select id="fa-currency">
+                            <option value="PHP">PHP - Philippine Peso</option>
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - British Pound</option>
+                            <option value="JPY">JPY - Japanese Yen</option>
+                            <option value="AUD">AUD - Australian Dollar</option>
+                            <option value="CAD">CAD - Canadian Dollar</option>
+                            <option value="CHF">CHF - Swiss Franc</option>
+                            <option value="CNY">CNY - Chinese Yuan</option>
+                            <option value="SGD">SGD - Singapore Dollar</option>
+                            <option value="HKD">HKD - Hong Kong Dollar</option>
+                            <option value="KRW">KRW - South Korean Won</option>
+                            <option value="TWD">TWD - Taiwan Dollar</option>
+                            <option value="NZD">NZD - New Zealand Dollar</option>
+                            <option value="SEK">SEK - Swedish Krona</option>
+                            <option value="NOK">NOK - Norwegian Krone</option>
+                            <option value="DKK">DKK - Danish Krone</option>
+                            <option value="INR">INR - Indian Rupee</option>
+                            <option value="BRL">BRL - Brazilian Real</option>
+                            <option value="MXN">MXN - Mexican Peso</option>
+                            <option value="ZAR">ZAR - South African Rand</option>
+                            <option value="AED">AED - UAE Dirham</option>
+                            <option value="SAR">SAR - Saudi Riyal</option>
+                            <option value="THB">THB - Thai Baht</option>
+                            <option value="MYR">MYR - Malaysian Ringgit</option>
+                            <option value="IDR">IDR - Indonesian Rupiah</option>
+                            <option value="VND">VND - Vietnamese Dong</option>
+                            <option value="TRY">TRY - Turkish Lira</option>
+                            <option value="PLN">PLN - Polish Zloty</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fa-roe">Bureau of Customs ROE</label>
+                        <input type="number" id="fa-roe" min="0" step="0.0001" value="56.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="fa-foreign-value">FCA Value</label>
+                        <input type="number" id="fa-foreign-value" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fa-insurance-type">Insurance</label>
+                        <select id="fa-insurance-type">
+                            <option value="0">None</option>
+                            <option value="0.02">2%</option>
+                            <option value="0.04">4%</option>
+                            <option value="manual">Manual</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="fa-insurance-manual-group" style="display:none;">
+                        <label for="fa-insurance-manual">Insurance Value (₱)</label>
+                        <input type="number" id="fa-insurance-manual" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fa-freight">Freight</label>
+                        <input type="number" id="fa-freight" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fa-excise-tax">Excise Tax (₱)</label>
+                        <input type="number" id="fa-excise-tax" min="0" step="0.01" value="0">
+                    </div>
+                    <button class="calc-compute-btn" onclick="calculateFormalAir()">Calculate</button>
+                </div>
+
+                <div class="calculator-results">
+                    <h3>Computation Breakdown</h3>
+                    <div class="result-item"><span class="result-label">CIF Value</span><span class="result-value" id="fa-cif">$0.00</span></div>
+                    <div class="result-item"><span class="result-label">Dutiable Value</span><span class="result-value" id="fa-dv">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Customs Duty</span><span class="result-value" id="fa-customs-duty">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Bank Charge</span><span class="result-value" id="fa-bank-charge">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Brokerage Fee</span><span class="result-value" id="fa-brokerage">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Import Processing Charge</span><span class="result-value" id="fa-import-processing">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Documentary Stamp</span><span class="result-value" id="fa-doc-stamp">₱130.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Total Landed Cost</span><span class="result-value" id="fa-total-landed">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Excise Tax</span><span class="result-value" id="fa-excise-tax-out">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">VAT Base</span><span class="result-value" id="fa-vat-base">₱0.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Value Added Tax (12%)</span><span class="result-value" id="fa-vat">₱0.00</span></div>
+
+                    <h4 style="margin:20px 0 10px;">Summary of Payment Breakdown</h4>
+                    <div class="result-item"><span class="result-label">Customs Duty</span><span class="result-value" id="fa-summary-customs-duty">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Value Added Tax</span><span class="result-value" id="fa-summary-vat">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Excise Tax</span><span class="result-value" id="fa-summary-excise">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Import Processing Charge</span><span class="result-value" id="fa-summary-ipc">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Documentary Stamp</span><span class="result-value" id="fa-summary-doc-stamp">₱130.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Total Duties, Taxes & Other Charges</span><span class="result-value" id="fa-total-charges">₱0.00</span></div>
+
+                    <div class="result-item"><span class="result-label">Less Advance Deposit</span><span class="result-value" id="fa-advance-deposit-out">₱0.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Net Amount Payable</span><span class="result-value" id="fa-net-payable">₱0.00</span></div>
+                </div>
+            </div>
+            <button class="reset-btn" onclick="resetFormalAirCalculator()">Reset</button>
+            <button class="print-btn" onclick="printFormalAirCalculation()">Print</button>
+        </div>
+    </div>
+
+    <!-- Informal Entry Air Calculator Modal -->
+    <div id="informal-air-calculator-modal" class="calculator-modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Informal Entry Air Calculator</h2>
+            <div class="calculator-wrapper">
+                <div class="calculator-inputs">
+                    <h3>Inputs</h3>
+                    <div class="form-group">
+                        <label for="ia-consignee">Name of Consignee</label>
+                        <input type="text" id="ia-consignee" placeholder="Consignee Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="ia-commodity">Commodity</label>
+                        <input type="text" id="ia-commodity" placeholder="Commodity Description">
+                    </div>
+                    <div class="form-group">
+                        <label for="ia-rate-duty">Rate of Duty (%)</label>
+                        <input type="number" id="ia-rate-duty" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="ia-incoterm">Incoterm Used</label>
+                        <select id="ia-incoterm">
+                            <option value="EXW">EXW</option>
+                            <option value="FOB">FOB</option>
+                            <option value="FCA">FCA</option>
+                            <option value="FAS">FAS</option>
+                            <option value="CIP">CIP</option>
+                            <option value="CIF">CIF</option>
+                            <option value="CPT">CPT</option>
+                            <option value="CFR">CFR</option>
+                            <option value="DAP">DAP</option>
+                            <option value="DDP">DDP</option>
+                            <option value="DPU">DPU</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ia-is-lc">Is it under L/C?</label>
+                        <select id="ia-is-lc">
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="ia-lc-value-group" style="display:none;">
+                        <label for="ia-lc-value">L/C Value (₱)</label>
+                        <input type="number" id="ia-lc-value" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="ia-currency">Currency Used</label>
+                        <select id="ia-currency">
+                            <option value="PHP">PHP - Philippine Peso</option>
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - British Pound</option>
+                            <option value="JPY">JPY - Japanese Yen</option>
+                            <option value="AUD">AUD - Australian Dollar</option>
+                            <option value="CAD">CAD - Canadian Dollar</option>
+                            <option value="CHF">CHF - Swiss Franc</option>
+                            <option value="CNY">CNY - Chinese Yuan</option>
+                            <option value="SGD">SGD - Singapore Dollar</option>
+                            <option value="HKD">HKD - Hong Kong Dollar</option>
+                            <option value="KRW">KRW - South Korean Won</option>
+                            <option value="TWD">TWD - Taiwan Dollar</option>
+                            <option value="NZD">NZD - New Zealand Dollar</option>
+                            <option value="SEK">SEK - Swedish Krona</option>
+                            <option value="NOK">NOK - Norwegian Krone</option>
+                            <option value="DKK">DKK - Danish Krone</option>
+                            <option value="INR">INR - Indian Rupee</option>
+                            <option value="BRL">BRL - Brazilian Real</option>
+                            <option value="MXN">MXN - Mexican Peso</option>
+                            <option value="ZAR">ZAR - South African Rand</option>
+                            <option value="AED">AED - UAE Dirham</option>
+                            <option value="SAR">SAR - Saudi Riyal</option>
+                            <option value="THB">THB - Thai Baht</option>
+                            <option value="MYR">MYR - Malaysian Ringgit</option>
+                            <option value="IDR">IDR - Indonesian Rupiah</option>
+                            <option value="VND">VND - Vietnamese Dong</option>
+                            <option value="TRY">TRY - Turkish Lira</option>
+                            <option value="PLN">PLN - Polish Zloty</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ia-foreign-value">Value in Foreign Currency</label>
+                        <input type="number" id="ia-foreign-value" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="ia-roe">Bureau of Customs ROE</label>
+                        <input type="number" id="ia-roe" min="0" step="0.0001" value="56.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="ia-insurance-type">Insurance</label>
+                        <select id="ia-insurance-type">
+                            <option value="0">None</option>
+                            <option value="0.02">2%</option>
+                            <option value="0.04">4%</option>
+                            <option value="manual">Manual</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="ia-insurance-manual-group" style="display:none;">
+                        <label for="ia-insurance-manual">Insurance Value (₱)</label>
+                        <input type="number" id="ia-insurance-manual" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="ia-freight">Freight</label>
+                        <input type="number" id="ia-freight" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="ia-excise-tax">Excise Tax (₱)</label>
+                        <input type="number" id="ia-excise-tax" min="0" step="0.01" value="0">
+                    </div>
+                    <button class="calc-compute-btn" onclick="calculateInformalAir()">Calculate</button>
+                </div>
+
+                <div class="calculator-results">
+                    <h3>Computation Breakdown</h3>
+                    <div class="result-item"><span class="result-label">CIF Value</span><span class="result-value" id="ia-cif">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Dutiable Value</span><span class="result-value" id="ia-dv">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Customs Duty</span><span class="result-value" id="ia-customs-duty">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Brokerage Fee</span><span class="result-value" id="ia-brokerage">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Documentary Stamp</span><span class="result-value" id="ia-doc-stamp">₱130.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Total Landed Cost</span><span class="result-value" id="ia-total-landed">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">VAT Base</span><span class="result-value" id="ia-vat-base">₱0.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Value Added Tax (12%)</span><span class="result-value" id="ia-vat">₱0.00</span></div>
+
+                    <h4 style="margin:20px 0 10px;">Summary of Payment</h4>
+                    <div class="result-item"><span class="result-label">Customs Duty</span><span class="result-value" id="ia-summary-customs-duty">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Value Added Tax</span><span class="result-value" id="ia-summary-vat">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Excise Tax</span><span class="result-value" id="ia-summary-excise">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Documentary Stamp</span><span class="result-value" id="ia-summary-doc-stamp">₱130.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Total Duties, Taxes & Other Charges</span><span class="result-value" id="ia-total-payable">₱0.00</span></div>
+                </div>
+            </div>
+            <button class="reset-btn" onclick="resetInformalAirCalculator()">Reset</button>
+            <button class="print-btn" onclick="printInformalAirCalculation()">Print</button>
+        </div>
+    </div>
+
+    <!-- Informal Entry Sea Calculator Modal -->
+    <div id="informal-sea-calculator-modal" class="calculator-modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Informal Entry Sea Calculator</h2>
+            <div class="calculator-wrapper">
+                <div class="calculator-inputs">
+                    <h3>Inputs</h3>
+                    <div class="form-group">
+                        <label for="is-consignee">Name of Consignee</label>
+                        <input type="text" id="is-consignee" placeholder="Consignee Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="is-commodity">Commodity</label>
+                        <input type="text" id="is-commodity" placeholder="Commodity Description">
+                    </div>
+                    <div class="form-group">
+                        <label for="is-rate-duty">Rate of Duty (%)</label>
+                        <input type="number" id="is-rate-duty" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="is-incoterm">Incoterm Used</label>
+                        <select id="is-incoterm">
+                            <option value="EXW">EXW</option>
+                            <option value="FOB">FOB</option>
+                            <option value="FCA">FCA</option>
+                            <option value="FAS">FAS</option>
+                            <option value="CIP">CIP</option>
+                            <option value="CIF">CIF</option>
+                            <option value="CPT">CPT</option>
+                            <option value="CFR">CFR</option>
+                            <option value="DAP">DAP</option>
+                            <option value="DDP">DDP</option>
+                            <option value="DPU">DPU</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="is-is-lc">Is it under L/C?</label>
+                        <select id="is-is-lc">
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="is-lc-value-group" style="display:none;">
+                        <label for="is-lc-value">L/C Value (₱)</label>
+                        <input type="number" id="is-lc-value" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="is-currency">Currency Used</label>
+                        <select id="is-currency">
+                            <option value="PHP">PHP - Philippine Peso</option>
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - British Pound</option>
+                            <option value="JPY">JPY - Japanese Yen</option>
+                            <option value="AUD">AUD - Australian Dollar</option>
+                            <option value="CAD">CAD - Canadian Dollar</option>
+                            <option value="CHF">CHF - Swiss Franc</option>
+                            <option value="CNY">CNY - Chinese Yuan</option>
+                            <option value="SGD">SGD - Singapore Dollar</option>
+                            <option value="HKD">HKD - Hong Kong Dollar</option>
+                            <option value="KRW">KRW - South Korean Won</option>
+                            <option value="TWD">TWD - Taiwan Dollar</option>
+                            <option value="NZD">NZD - New Zealand Dollar</option>
+                            <option value="SEK">SEK - Swedish Krona</option>
+                            <option value="NOK">NOK - Norwegian Krone</option>
+                            <option value="DKK">DKK - Danish Krone</option>
+                            <option value="INR">INR - Indian Rupee</option>
+                            <option value="BRL">BRL - Brazilian Real</option>
+                            <option value="MXN">MXN - Mexican Peso</option>
+                            <option value="ZAR">ZAR - South African Rand</option>
+                            <option value="AED">AED - UAE Dirham</option>
+                            <option value="SAR">SAR - Saudi Riyal</option>
+                            <option value="THB">THB - Thai Baht</option>
+                            <option value="MYR">MYR - Malaysian Ringgit</option>
+                            <option value="IDR">IDR - Indonesian Rupiah</option>
+                            <option value="VND">VND - Vietnamese Dong</option>
+                            <option value="TRY">TRY - Turkish Lira</option>
+                            <option value="PLN">PLN - Polish Zloty</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="is-fob">FOB Value</label>
+                        <input type="number" id="is-fob" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="is-roe">Bureau of Customs ROE</label>
+                        <input type="number" id="is-roe" min="0" step="0.0001" value="56.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="is-insurance-type">Insurance</label>
+                        <select id="is-insurance-type">
+                            <option value="0">None</option>
+                            <option value="0.02">2%</option>
+                            <option value="0.04">4%</option>
+                            <option value="manual">Manual</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="is-insurance-manual-group" style="display:none;">
+                        <label for="is-insurance-manual">Insurance Value (₱)</label>
+                        <input type="number" id="is-insurance-manual" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="is-freight">Freight</label>
+                        <input type="number" id="is-freight" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="is-excise-tax">Excise Tax (₱)</label>
+                        <input type="number" id="is-excise-tax" min="0" step="0.01" value="0">
+                    </div>
+                    <button class="calc-compute-btn" onclick="calculateInformalSea()">Calculate</button>
+                </div>
+
+                <div class="calculator-results">
+                    <h3>Computation Breakdown</h3>
+                    <div class="result-item"><span class="result-label">CIF Value</span><span class="result-value" id="is-cif">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Dutiable Value</span><span class="result-value" id="is-dv">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Customs Duty</span><span class="result-value" id="is-customs-duty">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Brokerage Fee</span><span class="result-value" id="is-brokerage">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Documentary Stamp</span><span class="result-value" id="is-doc-stamp">₱130.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Total Landed Cost</span><span class="result-value" id="is-total-landed">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">VAT Base</span><span class="result-value" id="is-vat-base">₱0.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Value Added Tax (12%)</span><span class="result-value" id="is-vat">₱0.00</span></div>
+
+                    <h4 style="margin:20px 0 10px;">Summary of Payment</h4>
+                    <div class="result-item"><span class="result-label">Customs Duty</span><span class="result-value" id="is-summary-customs-duty">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Value Added Tax</span><span class="result-value" id="is-summary-vat">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Excise Tax</span><span class="result-value" id="is-summary-excise">₱0.00</span></div>
+                    <div class="result-item"><span class="result-label">Documentary Stamp</span><span class="result-value" id="is-summary-doc-stamp">₱130.00</span></div>
+                    <div class="result-item highlight"><span class="result-label">Total Duties, Taxes & Other Charges</span><span class="result-value" id="is-total-payable">₱0.00</span></div>
+                </div>
+            </div>
+            <button class="reset-btn" onclick="resetInformalSeaCalculator()">Reset</button>
+            <button class="print-btn" onclick="printInformalSeaCalculation()">Print</button>
+        </div>
+    </div>
+
+    <!-- Excise Tax Calculator Modal -->
+    <div id="excise-calculator-modal" class="calculator-modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Excise Tax Calculator</h2>
+            
+            <div class="excise-calculator-container">
+                
+                <!-- DISTILLED SPIRITS Box -->
+                <div class="excise-category-box">
+                    <h3>DISTILLED SPIRITS</h3>
+                    <div class="excise-form-grid">
+                        <div class="form-group">
+                            <label for="ds-total-liters">Total Liters</label>
+                            <input type="number" id="ds-total-liters" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="ds-proof">Proof %</label>
+                            <input type="number" id="ds-proof" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="ds-total-bottles">Total Bottles</label>
+                            <input type="number" id="ds-total-bottles" placeholder="0" step="1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="ds-nrp-bottle">NRP per Bottle (₱)</label>
+                            <input type="number" id="ds-nrp-bottle" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+                    <button class="calculate-btn" onclick="calculateDistilledSpirits()">Calculate</button>
+                    
+                    <div class="results-section" id="ds-results" style="display: none;">
+                        <div class="total-excise-display">
+                            <div class="total-label">TOTAL EXCISE TAX TO BE PAID</div>
+                            <div class="total-amount" id="ds-total-display">₱0.00</div>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Specific Tax (ST)</span>
+                            <span class="result-value" id="ds-st">₱0.00</span>
+                            <span class="result-formula" id="ds-st-formula">= Total Liters × Proof% × ₱74.16</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Ad Valorem Tax (AVT)</span>
+                            <span class="result-value" id="ds-avt">₱0.00</span>
+                            <span class="result-formula" id="ds-avt-formula">= Total Bottles × NRP/Bottle × Proof% × 22%</span>
+                        </div>
+                        <div class="result-item total">
+                            <span class="result-label">Total Excise Tax</span>
+                            <span class="result-value" id="ds-total">₱0.00</span>
+                            <span class="result-formula" id="ds-total-formula">= ST + AVT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WINES Box -->
+                <div class="excise-category-box">
+                    <h3>WINES</h3>
+                    <div class="excise-form-grid">
+                        <div class="form-group">
+                            <label for="wines-total-liters">Total Liters</label>
+                            <input type="number" id="wines-total-liters" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+                    <button class="calculate-btn" onclick="calculateWines()">Calculate</button>
+                    
+                    <div class="results-section" id="wines-results" style="display: none;">
+                        <div class="total-excise-display">
+                            <div class="total-label">TOTAL EXCISE TAX TO BE PAID</div>
+                            <div class="total-amount" id="wines-total-display">₱0.00</div>
+                        </div>
+                        <div class="result-item total">
+                            <span class="result-label">Excise Tax</span>
+                            <span class="result-value" id="wines-total">₱0.00</span>
+                            <span class="result-formula" id="wines-formula">= Total Liters × ₱70.92</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FERMENTED LIQUOR Box -->
+                <div class="excise-category-box">
+                    <h3>FERMENTED LIQUOR</h3>
+                    <div class="excise-form-grid">
+                        <div class="form-group">
+                            <label for="fl-total-liters">Total Liters</label>
+                            <input type="number" id="fl-total-liters" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+                    <button class="calculate-btn" onclick="calculateFermentedLiquor()">Calculate</button>
+                    
+                    <div class="results-section" id="fl-results" style="display: none;">
+                        <div class="total-excise-display">
+                            <div class="total-label">TOTAL EXCISE TAX TO BE PAID</div>
+                            <div class="total-amount" id="fl-total-display">₱0.00</div>
+                        </div>
+                        <div class="result-item total">
+                            <span class="result-label">Excise Tax</span>
+                            <span class="result-value" id="fl-total">₱0.00</span>
+                            <span class="result-formula" id="fl-formula">= Total Liters × ₱48.31</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ETHYL ALCOHOL Box -->
+                <div class="excise-category-box">
+                    <h3>ETHYL ALCOHOL / ETHANOL</h3>
+                    <div class="excise-form-grid">
+                        <div class="form-group">
+                            <label for="ea-total-liters">Total Liters</label>
+                            <input type="number" id="ea-total-liters" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="ea-proof">Proof %</label>
+                            <input type="number" id="ea-proof" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="ea-dv">Dutiable Value (₱)</label>
+                            <input type="number" id="ea-dv" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+                    <button class="calculate-btn" onclick="calculateEthylAlcohol()">Calculate</button>
+                    
+                    <div class="results-section" id="ea-results" style="display: none;">
+                        <div class="total-excise-display">
+                            <div class="total-label">TOTAL EXCISE TAX TO BE PAID</div>
+                            <div class="total-amount" id="ea-total-display">₱0.00</div>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Specific Tax (ST)</span>
+                            <span class="result-value" id="ea-st">₱0.00</span>
+                            <span class="result-formula" id="ea-st-formula">= Total Liters × Proof% × ₱74.16</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Ad Valorem Tax (AVT)</span>
+                            <span class="result-value" id="ea-avt">₱0.00</span>
+                            <span class="result-formula" id="ea-avt-formula">= DV × Proof% × 22%</span>
+                        </div>
+                        <div class="result-item total">
+                            <span class="result-label">Total Excise Tax</span>
+                            <span class="result-value" id="ea-total">₱0.00</span>
+                            <span class="result-formula" id="ea-total-formula">= ST + AVT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- METALLIC MINERALS Box -->
+                <div class="excise-category-box">
+                    <h3>METALLIC MINERALS</h3>
+                    <div class="excise-form-grid">
+                        <div class="form-group">
+                            <label for="mm-dv">Dutiable Value (₱)</label>
+                            <input type="number" id="mm-dv" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+                    <button class="calculate-btn" onclick="calculateMetallicMinerals()">Calculate</button>
+                    
+                    <div class="results-section" id="mm-results" style="display: none;">
+                        <div class="total-excise-display">
+                            <div class="total-label">TOTAL EXCISE TAX TO BE PAID</div>
+                            <div class="total-amount" id="mm-total-display">₱0.00</div>
+                        </div>
+                        <div class="result-item total">
+                            <span class="result-label">Excise Tax</span>
+                            <span class="result-value" id="mm-total">₱0.00</span>
+                            <span class="result-formula" id="mm-formula">= DV × 4%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NON-ESSENTIALS Box -->
+                <div class="excise-category-box">
+                    <h3>NON-ESSENTIALS (Jewelry, etc.)</h3>
+                    <div class="excise-form-grid">
+                        <div class="form-group">
+                            <label for="ne-dv">Dutiable Value (₱)</label>
+                            <input type="number" id="ne-dv" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+                    <button class="calculate-btn" onclick="calculateNonEssentials()">Calculate</button>
+                    
+                    <div class="results-section" id="ne-results" style="display: none;">
+                        <div class="total-excise-display">
+                            <div class="total-label">TOTAL EXCISE TAX TO BE PAID</div>
+                            <div class="total-amount" id="ne-total-display">₱0.00</div>
+                        </div>
+                        <div class="result-item total">
+                            <span class="result-label">Excise Tax</span>
+                            <span class="result-value" id="ne-total">₱0.00</span>
+                            <span class="result-formula" id="ne-formula">= DV × 20%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CIGARETTES Box -->
+                <div class="excise-category-box">
+                    <h3>CIGARETTES</h3>
+                    <div class="excise-form-grid">
+                        <div class="form-group">
+                            <label for="cig-total-packs">Total Packs</label>
+                            <input type="number" id="cig-total-packs" placeholder="0" step="1" min="0">
+                        </div>
+                    </div>
+                    <button class="calculate-btn" onclick="calculateCigarettes()">Calculate</button>
+                    
+                    <div class="results-section" id="cig-results" style="display: none;">
+                        <div class="total-excise-display">
+                            <div class="total-label">TOTAL EXCISE TAX TO BE PAID</div>
+                            <div class="total-amount" id="cig-total-display">₱0.00</div>
+                        </div>
+                        <div class="result-item total">
+                            <span class="result-label">Excise Tax</span>
+                            <span class="result-value" id="cig-total">₱0.00</span>
+                            <span class="result-formula" id="cig-formula">= Total Packs × ₱72.9303</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CIGARS Box -->
+                <div class="excise-category-box">
+                    <h3>CIGARS</h3>
+                    <div class="excise-form-grid">
+                        <div class="form-group">
+                            <label for="cigars-total">Total Cigars</label>
+                            <input type="number" id="cigars-total" placeholder="0" step="1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="cigars-nrp">NRP per Cigar (₱)</label>
+                            <input type="number" id="cigars-nrp" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+                    <button class="calculate-btn" onclick="calculateCigars()">Calculate</button>
+                    
+                    <div class="results-section" id="cigars-results" style="display: none;">
+                        <div class="total-excise-display">
+                            <div class="total-label">TOTAL EXCISE TAX TO BE PAID</div>
+                            <div class="total-amount" id="cigars-total-display">₱0.00</div>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Ad Valorem Tax (AVT)</span>
+                            <span class="result-value" id="cigars-avt">₱0.00</span>
+                            <span class="result-formula" id="cigars-avt-formula">= Total Cigars × NRP/Cigar × 0.20</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Specific Tax (ST)</span>
+                            <span class="result-value" id="cigars-st">₱0.00</span>
+                            <span class="result-formula" id="cigars-st-formula">= Total Cigars × ₱8.9716</span>
+                        </div>
+                        <div class="result-item total">
+                            <span class="result-label">Total Excise Tax</span>
+                            <span class="result-value" id="cigars-total">₱0.00</span>
+                            <span class="result-formula" id="cigars-total-formula">= AVT + ST</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-actions">
+                <button class="reset-btn" onclick="resetAllExciseCalculators()">Reset All</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
